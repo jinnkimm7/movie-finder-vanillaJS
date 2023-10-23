@@ -1,0 +1,1 @@
+{"mappings":"AAAA,MAAM,OAAO,SAAS,aAAa,CAAC;AACpC,KAAK,MAAM,CAAC,IAAI,MAAM,EAAE","sources":["src/main.js"],"sourcesContent":["const root = document.querySelector('#root');\nroot.append(new App().el);"],"names":[],"version":3,"file":"index.de158e3a.js.map","sourceRoot":"/__parcel_source_root/"}
