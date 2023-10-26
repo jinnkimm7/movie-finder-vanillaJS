@@ -24,6 +24,33 @@ body {
   padding: 40px 0px;
 }
 
+.btn {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.btn:hover {
+  background-color: var(--color-hover);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-black);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-hover);
+  color: var(--color-white);
+}
+
+
+/* Header 컴포넌트 */
 .header {
   padding: 20px;
 }
@@ -42,4 +69,26 @@ body {
   font-size: 20px;
   margin-top: 10px;
   color: var(--color-white-30);
+}
+
+/* Search 컴포넌트 */
+.search {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  padding: 0 20px;
+  margin-bottom: 30px;
+}
+
+.search input {
+  flex-grow: 1;
+  padding: 0 10px;
+  border: 2px solid var(--color-primary);
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.search .btn {
+  flex-grow: 1;
+  max-width: 150px;
 }

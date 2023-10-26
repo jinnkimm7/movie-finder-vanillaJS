@@ -699,18 +699,21 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _header = require("../components/Header");
 var _headerDefault = parcelHelpers.interopDefault(_header);
+var _search = require("../components/Search");
+var _searchDefault = parcelHelpers.interopDefault(_search);
 var _component = require("../core/Component");
 var _componentDefault = parcelHelpers.interopDefault(_component);
 class Home extends (0, _componentDefault.default) {
     render() {
         const header = new (0, _headerDefault.default)().el;
+        const search = new (0, _searchDefault.default)().el;
         this.el.classList.add("container");
-        this.el.append(header);
+        this.el.append(header, search);
     }
 }
 exports.default = Home;
 
-},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../components/Header":"hsJbF"}],"hsJbF":[function(require,module,exports) {
+},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../components/Header":"hsJbF","../components/Search":"jqPPz"}],"hsJbF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _component = require("../core/Component");
@@ -738,6 +741,36 @@ class Header extends (0, _componentDefault.default) {
     }
 }
 exports.default = Header;
+
+},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jqPPz":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _component = require("../core/Component");
+var _componentDefault = parcelHelpers.interopDefault(_component);
+class Search extends (0, _componentDefault.default) {
+    constructor(){
+        super({
+            tagName: "form"
+        });
+    }
+    render() {
+        const formEl = this.el;
+        this.el.classList.add("search");
+        this.el.innerHTML = `
+      <input placeholder="Enter the movie title here!!"/>
+      <button class="btn btn-primary">Search!</button>
+    `;
+        const inputEl = this.el.querySelector("input");
+        inputEl.addEventListener("input", ()=>{
+            console.log(inputEl.value);
+        });
+        formEl.addEventListener("submit", (e)=>{
+            e.preventDefault();
+            console.log(inputEl.value);
+        });
+    }
+}
+exports.default = Search;
 
 },{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire432e")
 

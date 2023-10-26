@@ -24,6 +24,31 @@ body {
   padding: 40px 0;
 }
 
+.btn {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: all .3s;
+}
+
+.btn:hover {
+  background-color: var(--color-hover);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-black);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-hover);
+  color: var(--color-white);
+}
+
 .header {
   padding: 20px;
 }
@@ -42,6 +67,26 @@ body {
   color: var(--color-white-30);
   margin-top: 10px;
   font-size: 20px;
+}
+
+.search {
+  gap: 10px;
+  margin: 20px 0 30px;
+  padding: 0 20px;
+  display: flex;
+}
+
+.search input {
+  border: 2px solid var(--color-primary);
+  border-radius: 5px;
+  flex-grow: 1;
+  padding: 0 10px;
+  font-size: 16px;
+}
+
+.search .btn {
+  flex-grow: 1;
+  max-width: 150px;
 }
 
 /*# sourceMappingURL=index.af20ad6e.css.map */
