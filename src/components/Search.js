@@ -1,4 +1,5 @@
 import Component from '../core/Component';
+import movieStore, { searchMovies } from '../store/movie';
 
 export default class Search extends Component {
   constructor() {
@@ -16,11 +17,11 @@ export default class Search extends Component {
 
     const inputEl = this.el.querySelector('input');
     inputEl.addEventListener('input', () => {
-      console.log(inputEl.value);
+      movieStore.state.searchText = inputEl.value;
     });
     formEl.addEventListener('submit', (e) => {
       e.preventDefault();
-      console.log(inputEl.value);
+      searchMovies(1);
     });
 
   }

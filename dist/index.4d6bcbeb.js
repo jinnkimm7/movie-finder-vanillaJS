@@ -747,6 +747,8 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _component = require("../core/Component");
 var _componentDefault = parcelHelpers.interopDefault(_component);
+var _movie = require("../store/movie");
+var _movieDefault = parcelHelpers.interopDefault(_movie);
 class Search extends (0, _componentDefault.default) {
     constructor(){
         super({
@@ -762,16 +764,65 @@ class Search extends (0, _componentDefault.default) {
     `;
         const inputEl = this.el.querySelector("input");
         inputEl.addEventListener("input", ()=>{
-            console.log(inputEl.value);
+            (0, _movieDefault.default).state.searchText = inputEl.value;
         });
         formEl.addEventListener("submit", (e)=>{
             e.preventDefault();
-            console.log(inputEl.value);
+            (0, _movie.searchMovies)(1);
         });
     }
 }
 exports.default = Search;
 
-},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire432e")
+},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/movie":"kq1bo"}],"kq1bo":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "searchMovies", ()=>searchMovies);
+var _store = require("../core/Store");
+var _storeDefault = parcelHelpers.interopDefault(_store);
+const store = new (0, _storeDefault.default)({
+    searchText: "",
+    page: 1,
+    movies: []
+});
+exports.default = store;
+const searchMovies = async (page)=>{
+    if (page === 1) {
+        store.state.page = 1;
+        store.state.movies = [];
+    }
+    const API_KEY = "7035c60c";
+    const res = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${store.state.searchText}&page=${store.state.page}`);
+    const { Search } = await res.json();
+    store.state.movies = [
+        ...store.state.movies,
+        ...Search
+    ];
+};
+
+},{"../core/Store":"lNHVY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lNHVY":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class Store {
+    constructor(state){
+        this.state = {};
+        this.observers = {};
+        for(const key in state)Object.defineProperty(this.state, key, {
+            get: ()=>state[key],
+            set: (val)=>{
+                state[key] = val;
+                if (Array.isArray(this.observers[key])) this.observers[key].forEach((observer)=>observer(val));
+            }
+        });
+    }
+    subscribe(key, cb) {
+        Array.isArray(this.observers[key]) ? this.observers[key].push(cb) : this.observers[key] = [
+            cb
+        ];
+    }
+}
+exports.default = Store;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire432e")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map
