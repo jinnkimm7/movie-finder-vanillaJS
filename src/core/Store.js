@@ -7,7 +7,9 @@ export default class Store {
         get: () => state[key],
         set: val => {
           state[key] = val;
-          this.observers[key].forEach(observer => observer(val));
+          if (Array.isArray(this.observers[key])) {
+            this.observers[key].forEach(observer => observer(val));
+          }
         },
       })
     }
