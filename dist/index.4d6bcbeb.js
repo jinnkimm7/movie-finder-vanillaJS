@@ -833,6 +833,8 @@ var _component = require("../core/Component");
 var _componentDefault = parcelHelpers.interopDefault(_component);
 var _movie = require("../store/movie");
 var _movieDefault = parcelHelpers.interopDefault(_movie);
+var _movieItem = require("./MovieItem");
+var _movieItemDefault = parcelHelpers.interopDefault(_movieItem);
 class MovieList extends (0, _componentDefault.default) {
     constructor(){
         super();
@@ -846,13 +848,46 @@ class MovieList extends (0, _componentDefault.default) {
       <div class="movies"></div>
     `;
         const moviesEl = this.el.querySelector(".movies");
-        moviesEl.append((0, _movieDefault.default).state.movies.map((movie)=>{
-            return movie.Title;
+        moviesEl.append(...(0, _movieDefault.default).state.movies.map((movie)=>{
+            return new (0, _movieItemDefault.default)({
+                movie: movie
+            }).el;
         }));
     }
 }
 exports.default = MovieList;
 
-},{"../core/Component":"fgpas","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire432e")
+},{"../core/Component":"fgpas","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./MovieItem":"fAzE8"}],"fAzE8":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _component = require("../core/Component");
+var _componentDefault = parcelHelpers.interopDefault(_component);
+class MovieItem extends (0, _componentDefault.default) {
+    constructor(props){
+        super({
+            tagName: "a",
+            props: props
+        });
+    }
+    render() {
+        const { movie } = this.props;
+        this.el.setAttribute("href", `#/movie?id=${movie.imdbID}`);
+        this.el.classList.add("movie");
+        this.el.style.backgroundImage = `url(${movie.Poster})`;
+        this.el.innerHTML = `
+    <div class="info">
+      <div class="year">
+        ${movie.Year}
+      </div>
+      <div class="title">
+        ${movie.Title}
+      </div>
+    </div>
+    `;
+    }
+}
+exports.default = MovieItem;
+
+},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire432e")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map

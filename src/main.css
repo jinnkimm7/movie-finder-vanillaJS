@@ -92,3 +92,60 @@ body {
   flex-grow: 1;
   max-width: 150px;
 }
+
+/* MovieList 컴포넌트*/
+
+.movie-list {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: var(--color-area);
+}
+
+.movie-list .movies {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.movies .movie {
+  width: 200px;
+  height: 300px;
+  border-radius: 5px;
+  background-color: var(--color-black);
+  background-size: cover;
+  overflow: hidden;
+  position: relative;
+}
+
+.movies .movie:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border: 6px solid var(--color-primary);
+}
+
+.movies .movie .info {
+  width: 100%;
+  padding: 14px;
+  box-sizing: border-box;
+  font-size: 14px;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(14, 17, 27, .3);
+  backdrop-filter: blur(10px);
+}
+
+.movies .movie .info .year {
+  color: var(--color-primary);
+}
+
+.movies .movie .info .title {
+  color: var(--color-white);
+}
