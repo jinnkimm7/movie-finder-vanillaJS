@@ -9,8 +9,8 @@ const store = new Store({
 export default store;
 
 export const searchMovies = async page => {
+  store.state.page = page;
   if (page === 1) {
-    store.state.page = 1;
     store.state.movies = [];
   }
   const API_KEY = '7035c60c';

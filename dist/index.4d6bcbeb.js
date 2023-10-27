@@ -701,6 +701,8 @@ var _header = require("../components/Header");
 var _headerDefault = parcelHelpers.interopDefault(_header);
 var _movieList = require("../components/MovieList");
 var _movieListDefault = parcelHelpers.interopDefault(_movieList);
+var _movieListMore = require("../components/MovieListMore");
+var _movieListMoreDefault = parcelHelpers.interopDefault(_movieListMore);
 var _search = require("../components/Search");
 var _searchDefault = parcelHelpers.interopDefault(_search);
 var _component = require("../core/Component");
@@ -710,13 +712,14 @@ class Home extends (0, _componentDefault.default) {
         const header = new (0, _headerDefault.default)().el;
         const search = new (0, _searchDefault.default)().el;
         const movieList = new (0, _movieListDefault.default)().el;
+        const movieListMore = new (0, _movieListMoreDefault.default)().el;
         this.el.classList.add("container");
-        this.el.append(header, search, movieList);
+        this.el.append(header, search, movieList, movieListMore);
     }
 }
 exports.default = Home;
 
-},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../components/Header":"hsJbF","../components/Search":"jqPPz","../components/MovieList":"8UDl3"}],"hsJbF":[function(require,module,exports) {
+},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../components/Header":"hsJbF","../components/Search":"jqPPz","../components/MovieList":"8UDl3","../components/MovieListMore":"3ZUar"}],"hsJbF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _component = require("../core/Component");
@@ -790,10 +793,8 @@ const store = new (0, _storeDefault.default)({
 });
 exports.default = store;
 const searchMovies = async (page)=>{
-    if (page === 1) {
-        store.state.page = 1;
-        store.state.movies = [];
-    }
+    store.state.page = page;
+    if (page === 1) store.state.movies = [];
     const API_KEY = "7035c60c";
     const res = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${store.state.searchText}&page=${store.state.page}`);
     const { Search } = await res.json();
@@ -888,6 +889,34 @@ class MovieItem extends (0, _componentDefault.default) {
 }
 exports.default = MovieItem;
 
-},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire432e")
+},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3ZUar":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _component = require("../core/Component");
+var _componentDefault = parcelHelpers.interopDefault(_component);
+var _movie = require("../store/movie");
+var _movieDefault = parcelHelpers.interopDefault(_movie);
+class MovieListMore extends (0, _componentDefault.default) {
+    constructor(){
+        super({
+            tagName: "button"
+        });
+        (0, _movieDefault.default).subscribe("pageMax", ()=>{
+            const { page, pageMax } = (0, _movieDefault.default).state;
+            if (pageMax > page) this.el.classList.remove("hide");
+            else this.el.classList.add("hide");
+        });
+    }
+    render() {
+        this.el.classList.add("btn", "view-more", "hide");
+        this.el.textContent = "view more..";
+        this.el.addEventListener("click", async ()=>{
+            await (0, _movie.searchMovies)((0, _movieDefault.default).state.page + 1);
+        });
+    }
+}
+exports.default = MovieListMore;
+
+},{"../core/Component":"fgpas","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire432e")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map
