@@ -11,7 +11,9 @@ export default class Search extends Component {
     const formEl = this.el;
     this.el.classList.add('search');
     this.el.innerHTML = `
-      <input placeholder="Enter the movie title here!!"/>
+      <input 
+      value="${movieStore.state.searchText}" 
+      placeholder="Enter the movie title here!!"/>
       <button class="btn btn-primary">Search!</button>
     `;
 

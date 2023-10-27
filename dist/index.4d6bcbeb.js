@@ -655,14 +655,20 @@ var _createRouter = require("../core/createRouter");
 var _createRouterDefault = parcelHelpers.interopDefault(_createRouter);
 var _home = require("./Home");
 var _homeDefault = parcelHelpers.interopDefault(_home);
+var _movie = require("./Movie");
+var _movieDefault = parcelHelpers.interopDefault(_movie);
 exports.default = (0, _createRouterDefault.default)([
     {
         path: "#/",
         component: (0, _homeDefault.default)
+    },
+    {
+        path: "#/movie",
+        component: (0, _movieDefault.default)
     }
 ]);
 
-},{"../core/createRouter":"gd84T","./Home":"aZidY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gd84T":[function(require,module,exports) {
+},{"../core/createRouter":"gd84T","./Home":"aZidY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./Movie":"8kSUg"}],"gd84T":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>createRouter);
@@ -765,7 +771,9 @@ class Search extends (0, _componentDefault.default) {
         const formEl = this.el;
         this.el.classList.add("search");
         this.el.innerHTML = `
-      <input placeholder="Enter the movie title here!!"/>
+      <input 
+      value="${(0, _movieDefault.default).state.searchText}" 
+      placeholder="Enter the movie title here!!"/>
       <button class="btn btn-primary">Search!</button>
     `;
         const inputEl = this.el.querySelector("input");
@@ -784,6 +792,7 @@ exports.default = Search;
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "searchMovies", ()=>searchMovies);
+parcelHelpers.export(exports, "getMovieDetails", ()=>getMovieDetails);
 var _store = require("../core/Store");
 var _storeDefault = parcelHelpers.interopDefault(_store);
 const store = new (0, _storeDefault.default)({
@@ -791,16 +800,17 @@ const store = new (0, _storeDefault.default)({
     page: 1,
     pageMax: 1,
     movies: [],
+    movie: {},
     message: "Search for the movie title!"
 });
 exports.default = store;
+const API_KEY = "7035c60c";
 const searchMovies = async (page)=>{
     store.state.page = page;
     if (page === 1) {
         store.state.movies = [];
         store.state.message = "";
     }
-    const API_KEY = "7035c60c";
     try {
         const res = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${store.state.searchText}&page=${store.state.page}`);
         const { Search, totalResults, Response, Error } = await res.json();
@@ -816,6 +826,14 @@ const searchMovies = async (page)=>{
         }
     } catch (error) {
         console.log("searchMovies error:", error);
+    }
+};
+const getMovieDetails = async (id)=>{
+    try {
+        const res = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&i=${id}&plot=full`);
+        store.state.movie = await res.json();
+    } catch (error) {
+        console.log("getMovieDetails error:", error);
     }
 };
 
@@ -936,6 +954,61 @@ class MovieListMore extends (0, _componentDefault.default) {
 }
 exports.default = MovieListMore;
 
-},{"../core/Component":"fgpas","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire432e")
+},{"../core/Component":"fgpas","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8kSUg":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _component = require("../core/Component");
+var _componentDefault = parcelHelpers.interopDefault(_component);
+var _movie = require("../store/movie");
+var _movieDefault = parcelHelpers.interopDefault(_movie);
+class Movie extends (0, _componentDefault.default) {
+    async render() {
+        await (0, _movie.getMovieDetails)(history.state.id);
+        const { movie } = (0, _movieDefault.default).state;
+        const bigPoster = movie.Poster.replace("SX300", "SX700");
+        this.el.classList.add("container", "the-movie");
+        this.el.innerHTML = `
+      <div 
+      style="background-image: url(${bigPoster})" 
+      class="poster"></div>
+      <div class="specs">
+        <div class="title">${movie.Title}</div>
+        <div class="labels">
+          <span>${movie.Released}</span>
+          &nbsp;/&nbsp;
+          <span>${movie.Runtime}</span>
+          &nbsp;/&nbsp;
+          <span>${movie.Country}</span>
+        </div>
+        <div class="plot">
+          ${movie.Plot}
+        </div>
+        <div>
+          <h3>Rating</h3>
+          <p>${movie.Ratings.map((rating)=>`<p>${rating.Source} - ${rating.Value}</p>`).join("")}</p>
+        </div>
+        <div>
+          <h3>Actors</h3>
+          <p>${movie.Actors}</p>
+        </div>
+        <div>
+          <h3>Director</h3>
+          <p></p>
+        </div>
+        <div>
+          <h3>Production</h3>
+          <p>${movie.Production}</p>
+        </div>
+        <div>
+          <h3>Genre</h3>
+          <p>${movie.Genre}</p>
+        </div>
+      </div>
+    `;
+    }
+}
+exports.default = Movie;
+
+},{"../core/Component":"fgpas","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/movie":"kq1bo"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire432e")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map

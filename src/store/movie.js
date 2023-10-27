@@ -5,10 +5,13 @@ const store = new Store({
   page: 1,
   pageMax: 1,
   movies: [],
+  movie: {},
   message: 'Search for the movie title!'
 });
 
 export default store;
+
+const API_KEY = '7035c60c';
 
 export const searchMovies = async page => {
   store.state.page = page;
@@ -16,8 +19,6 @@ export const searchMovies = async page => {
     store.state.movies = [];
     store.state.message = '';
   }
-  const API_KEY = '7035c60c';
-
   try {
     const res = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${store.state.searchText}&page=${store.state.page}`);
     const { Search, totalResults, Response, Error } = await res.json();
@@ -33,5 +34,14 @@ export const searchMovies = async page => {
     }
   } catch (error) {
     console.log('searchMovies error:', error);
+  }
+}
+
+export const getMovieDetails = async id => {
+  try {
+    const res = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&i=${id}&plot=full`);
+    store.state.movie = await res.json();
+  } catch (error) {
+    console.log('getMovieDetails error:', error);
   }
 }
