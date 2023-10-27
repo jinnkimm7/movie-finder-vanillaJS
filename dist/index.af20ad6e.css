@@ -103,6 +103,12 @@ body {
   display: flex;
 }
 
+.movie-list .message {
+  color: var(--color-primary);
+  text-align: center;
+  font-size: 20px;
+}
+
 .movies .movie {
   background-color: var(--color-black);
   background-size: cover;

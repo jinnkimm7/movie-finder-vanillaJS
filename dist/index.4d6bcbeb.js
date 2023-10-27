@@ -789,19 +789,34 @@ var _storeDefault = parcelHelpers.interopDefault(_store);
 const store = new (0, _storeDefault.default)({
     searchText: "",
     page: 1,
-    movies: []
+    pageMax: 1,
+    movies: [],
+    message: "Search for the movie title!"
 });
 exports.default = store;
 const searchMovies = async (page)=>{
     store.state.page = page;
-    if (page === 1) store.state.movies = [];
+    if (page === 1) {
+        store.state.movies = [];
+        store.state.message = "";
+    }
     const API_KEY = "7035c60c";
-    const res = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${store.state.searchText}&page=${store.state.page}`);
-    const { Search } = await res.json();
-    store.state.movies = [
-        ...store.state.movies,
-        ...Search
-    ];
+    try {
+        const res = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${store.state.searchText}&page=${store.state.page}`);
+        const { Search, totalResults, Response, Error } = await res.json();
+        if (Response === "True") {
+            store.state.movies = [
+                ...store.state.movies,
+                ...Search
+            ];
+            store.state.pageMax = Math.ceil(Number(totalResults) / 10);
+        } else {
+            store.state.message = Error;
+            store.state.pageMax = 1;
+        }
+    } catch (error) {
+        console.log("searchMovies error:", error);
+    }
 };
 
 },{"../core/Store":"lNHVY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lNHVY":[function(require,module,exports) {
@@ -842,14 +857,17 @@ class MovieList extends (0, _componentDefault.default) {
         (0, _movieDefault.default).subscribe("movies", ()=>{
             this.render();
         });
+        (0, _movieDefault.default).subscribe("message", ()=>{
+            this.render();
+        });
     }
     render() {
         this.el.classList.add("movie-list");
         this.el.innerHTML = `
-      <div class="movies"></div>
+      ${(0, _movieDefault.default).state.message ? `<div class="message">${(0, _movieDefault.default).state.message}</div>` : '<div class="movies"></div>'}
     `;
         const moviesEl = this.el.querySelector(".movies");
-        moviesEl.append(...(0, _movieDefault.default).state.movies.map((movie)=>{
+        moviesEl?.append(...(0, _movieDefault.default).state.movies.map((movie)=>{
             return new (0, _movieItemDefault.default)({
                 movie: movie
             }).el;
@@ -911,6 +929,7 @@ class MovieListMore extends (0, _componentDefault.default) {
         this.el.classList.add("btn", "view-more", "hide");
         this.el.textContent = "view more..";
         this.el.addEventListener("click", async ()=>{
+            this.el.classList.add("hide");
             await (0, _movie.searchMovies)((0, _movieDefault.default).state.page + 1);
         });
     }
